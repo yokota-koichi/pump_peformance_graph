@@ -9,9 +9,10 @@
 - python
 
 ## Usage
-main_makegraph_performance.pyのみ変更します．
-基本的には以下のインプットを変えます．
-###input
+###main_makegraph_performance.py
+このpyファイルのみ変更します．
+基本的には以下の4つのみを変更することになります．
+####input
 - test_config:
     - グラフの凡例名になる．何の試験かわかる文言をいれる．
 - dim_srg:
@@ -20,6 +21,13 @@ main_makegraph_performance.pyのみ変更します．
     - 測定シートのファイルパスを入力．このpyファイルからの相対パス，もしくは絶対パスでもよい．
 - sheet_name:
     - 測定シートのデータが記入されているシート名を入力．
+
+####output
+- PSPQというシートとbackpressureというシートが追加され，そこにグラフが作成されます．
+
+###mod_makegraph_performance.py
+モジュールを集めたpyファイルです．
+特に変更する必要はありません．
 
 上記のパラメータを変更したら，**main_makegraph_performance.pyを実行**してください．
 
