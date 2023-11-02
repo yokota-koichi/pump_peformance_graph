@@ -35,7 +35,7 @@ def data_sort(measured_data_s, start_row):
                 list_rownum_pspq.append(i)
             # 空白ではない行の行番号をリストに格納．
             else: list_rownum_backpressure.append(i)
-
+    print(f'{list_rownum_backpressure=}')
     pspq = None
     backpressure = None
 
@@ -57,7 +57,8 @@ def data_sort(measured_data_s, start_row):
 
             elif measured_data_s.cell(i,3).value != measured_data_s.cell(i+1,3).value:
                 end_num.append(i)
-
+        print(f'{start_num=}')
+        print(f'{end_num=}')
         # 背圧特性評価に必要なデータを辞書形式で保存．
         # key = 流量, value = [排気口圧力，吸気口圧力]
         dict_backpressure = {}
@@ -67,6 +68,7 @@ def data_sort(measured_data_s, start_row):
                 list_tmp.append([measured_data_s.cell(i,11).value, measured_data_s.cell(i,7).value])
             dict_backpressure[measured_data_s.cell(start_num[j],3).value] = np.array(list_tmp)
         backpressure = True
+        print(dict_backpressure)
 
     if pspq == None and backpressure == None:
         print('グラフを作成するためのデータがありません!.')
@@ -283,7 +285,12 @@ def data_process(file_name,sheet_name,test_config, dim_srg):
     # データが始まる最初の行．排気性能測定シートのフォーマットが変わらなければ18のままでいい．
     start_row = 18
     # ブック読み込み
-    wb = xl.load_workbook(file_name, data_only=True)
+
+    if file_name.split('.')[1] == 'xlsm':
+        wb = xl.load_workbook(file_name, data_only=True, keep_vba=True)
+
+    else:
+        wb = xl.load_workbook(file_name, data_only=True)
 
     measured_data_sheet = wb[sheet_name]
 
@@ -308,3 +315,4 @@ def data_process(file_name,sheet_name,test_config, dim_srg):
         wb.save('new_book.xlsx')
         print('Caution!!')
         print('err msg: 「エクセルファイルが閉じられていないので，指定ファイルに保存できません．\n別ブックとして保存しました．」')
+
