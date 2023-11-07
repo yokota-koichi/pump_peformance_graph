@@ -2,6 +2,7 @@ from openpyxl.chart import ScatterChart, Reference, Series
 from openpyxl.chart.text import RichText
 from openpyxl.drawing.text import Paragraph, ParagraphProperties, CharacterProperties, Font
 from openpyxl.chart.axis import ChartLines
+from collections import Counter
 import numpy as np
 import openpyxl as xl
 import sys
@@ -35,7 +36,6 @@ def data_sort(measured_data_s, start_row):
                 list_rownum_pspq.append(i)
             # 空白ではない行の行番号をリストに格納．
             else: list_rownum_backpressure.append(i)
-    print(f'{list_rownum_backpressure=}')
     pspq = None
     backpressure = None
 
@@ -48,25 +48,23 @@ def data_sort(measured_data_s, start_row):
 
     if list_rownum_backpressure != []:
         # ここから背圧特性のデータ整理
-        # 各流量の最初のセルと最後のセルの行番号をリストに格納
-        start_num = []
-        end_num = []
+        # C列からsccmを取得
+        list_sccm = []
         for i in list_rownum_backpressure:
-            if measured_data_s.cell(i,3).value != measured_data_s.cell(i-1,3).value:
-                start_num.append(i)
+            list_sccm.append(round(measured_data_s.cell(i,3).value))
 
-            elif measured_data_s.cell(i,3).value != measured_data_s.cell(i+1,3).value:
-                end_num.append(i)
-        print(f'{start_num=}')
-        print(f'{end_num=}')
+        # list_sccmの中から種類を抜き出す．（辞書｛sccm：個数｝を作成し，key()で種類を抜き出す）
+        list_sccm_var = Counter(list_sccm).keys()
+
         # 背圧特性評価に必要なデータを辞書形式で保存．
         # key = 流量, value = [排気口圧力，吸気口圧力]
         dict_backpressure = {}
-        for j in range(len(start_num)):
-            list_tmp = []
-            for i in range(start_num[j], end_num[j]):
-                list_tmp.append([measured_data_s.cell(i,11).value, measured_data_s.cell(i,7).value])
-            dict_backpressure[measured_data_s.cell(start_num[j],3).value] = np.array(list_tmp)
+        for i in sorted(list_sccm_var):
+            dict_backpressure[i] = []
+            for j in list_rownum_backpressure:
+                if round(measured_data_s.cell(j,3).value) == i:
+                    dict_backpressure[i].append([measured_data_s.cell(j,11).value, measured_data_s.cell(j,7).value])
+            dict_backpressure[i] = np.array(dict_backpressure[i])
         backpressure = True
         print(dict_backpressure)
 
@@ -240,8 +238,8 @@ def make_backpressure_curve(ws, test_config, dict_backpressure):
     # 散布図を作成
     chart = ScatterChart()
     # グラフのサイズを変更
-    chart.height = 20
-    chart.width = 12
+    chart.height = 24
+    chart.width = 16
     # タイトルはなし（バグかわからないがタイトルが消えないかも）
     chart.title = None
     # 軸ラベル設定
@@ -285,6 +283,7 @@ def data_process(file_name,sheet_name,test_config, dim_srg):
     # データが始まる最初の行．排気性能測定シートのフォーマットが変わらなければ18のままでいい．
     start_row = 18
     # ブック読み込み
+
 
     if file_name.split('.')[1] == 'xlsm':
         wb = xl.load_workbook(file_name, data_only=True, keep_vba=True)
