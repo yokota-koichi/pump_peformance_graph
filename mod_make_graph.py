@@ -97,7 +97,7 @@ def write_pspq_data(ws, test_config, list_pspq, dim_srg):
 def make_pspq_curve(ws, test_config):
     lastrow = ws.Cells(ws.Rows.Count, 3).End(-4162).Row
     # PS曲線用の散布図を作成
-    ps = ws.Shapes.AddChart2(240,75).Chart
+    ps = ws.Shapes.AddChart2(240,74).Chart
     ws.ChartObjects(1).Left = 100
     ws.ChartObjects(1).Top = 400
     ws.ChartObjects(1).Width = 400
@@ -186,16 +186,15 @@ def make_backpressure_curve(ws, test_config, dict_backpressure):
     ws.ChartObjects(1).Top = 200
     ws.ChartObjects(1).Width = 500
     ws.ChartObjects(1).Height = 500
-    chart.SetSourceData(ws.Range('A4:A%d' %(3+num_series)))
+    chart.ChartArea.ClearContents()
 
 
 
     for i in range(num_series):
-        if i != 0:
-            chart.SeriesCollection().NewSeries()
-        chart.SeriesCollection(i+1).XValues = ws.Range(ws.Cells(4,2*i+1),ws.Cells(3+len(dict_backpressure[sccm_list[i]]),2*i+1))
-        chart.SeriesCollection(i+1).Values = ws.Range(ws.Cells(4,2*i+2),ws.Cells(3+len(dict_backpressure[sccm_list[i]]),2*i+2))
-        chart.SeriesCollection(i+1).Name = test_config + '-%ssccm' %sccm_list[i]
+        chart.SeriesCollection().NewSeries()
+        chart.FullSeriesCollection(i+1).XValues = ws.Range(ws.Cells(4,2*i+1),ws.Cells(3+len(dict_backpressure[sccm_list[i]]),2*i+1))
+        chart.FullSeriesCollection(i+1).Values = ws.Range(ws.Cells(4,2*i+2),ws.Cells(3+len(dict_backpressure[sccm_list[i]]),2*i+2))
+        chart.FullSeriesCollection(i+1).Name = test_config + '-%ssccm' %sccm_list[i]
 
     chart.Hastitle = True
     chart.ChartTitle.Text='背圧特性'
@@ -267,7 +266,7 @@ if __name__ == '__main__':
     dim_srg = 'Torr' # or 'Pa'
 
     # ファイルパスを記入．このpyファイルからの相対パス．もしくは絶対パス．
-    file_name = r"\\172.31.120.33\産業機械事業部tmpbu\TMP\k_共用\e_登録文書\g_GAxx\8_GA8x-xxxx_新採番(W1)\7_GA87-xxxx_技術文書(社内ﾚﾎﾟｰﾄ)\GA87-2257_TMP-1704LMF (T1)_技術文書\GA87-2257-13_TMP-1704LMF (T1)_排気性能測定\背圧調整排速測定シート_1704LMF(T1)_Ar_20231226.xlsm"
+    file_name = r"C:\Users\shimadzu\OneDrive - SHIMADZU\ykt\03_my program\python\pump_performance\pywin\背圧調整排速測定シート_1704LMF(T1)_N2_20231225.xlsm"
     # 測定シートのシート名
     sheet_name = 'Sheet1'
 
