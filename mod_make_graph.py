@@ -191,7 +191,8 @@ def make_backpressure_curve(ws, test_config, dict_backpressure):
 
 
     for i in range(num_series):
-        chart.SeriesCollection().NewSeries()
+        if i != 0:
+            chart.SeriesCollection().NewSeries()
         chart.SeriesCollection(i+1).XValues = ws.Range(ws.Cells(4,2*i+1),ws.Cells(3+len(dict_backpressure[sccm_list[i]]),2*i+1))
         chart.SeriesCollection(i+1).Values = ws.Range(ws.Cells(4,2*i+2),ws.Cells(3+len(dict_backpressure[sccm_list[i]]),2*i+2))
         chart.SeriesCollection(i+1).Name = test_config + '-%ssccm' %sccm_list[i]
