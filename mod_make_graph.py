@@ -219,7 +219,7 @@ def make_backpressure_curve(ws, test_config, dict_backpressure):
 
 def data_process(file_name,sheet_name,test_config, dim_srg):
     xl = win32com.client.Dispatch('Excel.Application')
-    # xl.Visible = False
+    xl.Visible = False
     wb = xl.Workbooks.Open(file_name)
     ws = wb.Worksheets(sheet_name)
 
@@ -266,7 +266,7 @@ if __name__ == '__main__':
     dim_srg = 'Torr' # or 'Pa'
 
     # ファイルパスを記入．このpyファイルからの相対パス．もしくは絶対パス．
-    file_name = r"C:\Users\shimadzu\OneDrive - SHIMADZU\ykt\03_my program\python\pump_performance\pywin\背圧調整排速測定シート_1704LMF(T1)_N2_20231225.xlsm"
+    file_name = r"C:\Users\shimadzu\OneDrive - SHIMADZU\ykt\03_my program\python\pump_performance\pywin\背圧調整排速測定シート_1704LMF(T1)_Ar_20231226.xlsm"
     # 測定シートのシート名
     sheet_name = 'Sheet1'
 
