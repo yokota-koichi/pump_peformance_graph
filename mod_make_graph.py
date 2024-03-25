@@ -76,9 +76,9 @@ def write_pspq_data(ws, test_config, list_pspq, dim_srg):
     list_word = [['','',test_config,'','','',''],['Gas throughput', '', 'Inlet pressure', '', 'Foreline pressure', '', 'Pumping speed'], ['sccm', '', 'Torr', 'Pa', 'Torr', 'Pa', 'L/s']]
 
     if dim_srg == 'Torr':
-        coef_mat = [1,133.32]
+        coef_mat = [1,1/133.32]
     elif dim_srg == 'Pa':
-        coef_mat = [1/133.32, 1]
+        coef_mat = [133.32, 1]
     else:
         messagebox.showerror('SRGの単位が正しく記入されていません')
 
@@ -90,8 +90,8 @@ def write_pspq_data(ws, test_config, list_pspq, dim_srg):
         ws.Cells(i+4,1).Value = list_pspq[i][0]
         ws.Cells(i+4,3).Value=list_pspq[i][1]*coef_mat[0]
         ws.Cells(i+4,4).Value=list_pspq[i][1]*coef_mat[1]
-        ws.Cells(i+4,5).Value=list_pspq[i][2]
-        ws.Cells(i+4,6).Value=list_pspq[i][2]
+        ws.Cells(i+4,5).Value=list_pspq[i][2]*coef_mat[0]
+        ws.Cells(i+4,6).Value=list_pspq[i][2]*coef_mat[1]
         ws.Cells(i+4,7).Value=list_pspq[i][3]
 
 def make_pspq_curve(ws, test_config):
@@ -102,13 +102,13 @@ def make_pspq_curve(ws, test_config):
     ws.ChartObjects(1).Top = 400
     ws.ChartObjects(1).Width = 400
     ws.ChartObjects(1).Height = 250
-    ps.FullSeriesCollection(1).XValues = "=%s!$D$4:$D$%d" %(ws.Name, lastrow)
+    ps.FullSeriesCollection(1).XValues = "=%s!$C$4:$C$%d" %(ws.Name, lastrow)
     ps.FullSeriesCollection(1).Values = '=%s!$G$4:$G$%d' %(ws.Name, lastrow)
     ps.FullSeriesCollection(1).Name = test_config
     ps.Hastitle = True
     ps.ChartTitle.Text='PS curve'
     ps.Axes(1).HasTitle = True
-    ps.Axes(1).AxisTitle.Text = 'Inlet Pressure [Pa]'
+    ps.Axes(1).AxisTitle.Text = 'Inlet Pressure [Torr]'
     ps.Axes(2).HasTitle = True
     ps.Axes(2).AxisTitle.Text = 'Pumping speed [L/s]'
     ps.Axes(1).ScaleType = -4133
@@ -127,7 +127,7 @@ def make_pspq_curve(ws, test_config):
     ws.ChartObjects(2).Top = 400
     ws.ChartObjects(2).Width = 400
     ws.ChartObjects(2).Height = 250
-    pq.FullSeriesCollection(1).XValues = "=%s!$D$4:$D$25" %ws.Name
+    pq.FullSeriesCollection(1).XValues = "=%s!$C$4:$C$25" %ws.Name
     pq.FullSeriesCollection(1).Values = '=%s!$A$4:$A$25' %ws.Name
     pq.FullSeriesCollection(1).Name = test_config
     pq.Hastitle = True
@@ -136,7 +136,7 @@ def make_pspq_curve(ws, test_config):
     pq.Axes(2).TickLabelPosition = -4134
     pq.Axes(1).HasMinorGridlines = True
     pq.Axes(1).HasTitle = True
-    pq.Axes(1).AxisTitle.Text = 'Inlet pressure [Pa]'
+    pq.Axes(1).AxisTitle.Text = 'Inlet pressure [Torr]'
     pq.Axes(2).HasTitle = True
     pq.Axes(2).AxisTitle.Text = 'Gas throughput [sccm]'
     pq.HasLegend = True
@@ -149,9 +149,9 @@ def make_pspq_curve(ws, test_config):
 
 def write_backpressure_data(ws, test_config, dict_backpressure, dim_srg):
     if dim_srg == 'Torr':
-        coef_mat = [1,133.32]
+        coef_mat = [1,1/133.32]
     elif dim_srg == 'Pa':
-        coef_mat = [1/133.32, 1]
+        coef_mat = [133.32, 1]
     else:
         messagebox('エラー！','SRGの単位が選択されていません')
 
