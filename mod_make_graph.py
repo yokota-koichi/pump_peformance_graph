@@ -78,7 +78,7 @@ def write_pspq_data(ws, test_config, list_pspq, dim_srg):
     if dim_srg == 'Torr':
         coef_mat = [1,133.32]
     elif dim_srg == 'Pa':
-        coef_mat == [1/133.32, 1]
+        coef_mat = [1/133.32, 1]
     else:
         messagebox.showerror('SRGの単位が正しく記入されていません')
 
