@@ -151,7 +151,7 @@ def write_backpressure_data(ws, test_config, dict_backpressure, dim_srg):
     if dim_srg == 'Torr':
         coef_mat = [1,133.32]
     elif dim_srg == 'Pa':
-        coef_mat == [1/133.32, 1]
+        coef_mat = [1/133.32, 1]
     else:
         messagebox('エラー！','SRGの単位が選択されていません')
 
