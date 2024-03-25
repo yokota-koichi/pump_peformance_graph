@@ -46,7 +46,7 @@ def set_sheetname_frame(parent_frame):
 
 def set_dim_radiobutton(parent_frame):
     dim_p_frame = ttk.Frame(parent_frame)
-    dim_p_frame.rb = tk.StringVar(value='Torr')
+    dim_p_frame.rb = tk.StringVar(value='Pa')
     tk.Label(dim_p_frame,text='SRGの出力値の単位を選んでください．').pack()
     rb1 = tk.Radiobutton(dim_p_frame, value='Pa', variable=dim_p_frame.rb, text='Pa')
     rb2 = tk.Radiobutton(dim_p_frame, value='Torr', variable=dim_p_frame.rb, text='Torr')
