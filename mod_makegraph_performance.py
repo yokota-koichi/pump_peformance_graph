@@ -2,10 +2,13 @@ from openpyxl.chart import ScatterChart, Reference, Series
 from openpyxl.chart.text import RichText
 from openpyxl.drawing.text import Paragraph, ParagraphProperties, CharacterProperties, Font
 from openpyxl.chart.axis import ChartLines
+import win32com.client
 from collections import Counter
 import numpy as np
 import openpyxl as xl
 import sys
+from tkinter import messagebox
+
 
 
 """
@@ -66,11 +69,9 @@ def data_sort(measured_data_s, start_row):
                     dict_backpressure[i].append([measured_data_s.cell(j,11).value, measured_data_s.cell(j,7).value])
             dict_backpressure[i] = np.array(dict_backpressure[i])
         backpressure = True
-        print(dict_backpressure)
 
     if pspq == None and backpressure == None:
-        print('グラフを作成するためのデータがありません!.')
-        print('プログラムを終了します．')
+        messagebox.showerror('エラー！','グラフを作成するためのデータがありません!.')
         sys.exit()
 
     elif pspq == True and backpressure == None:
@@ -97,9 +98,9 @@ def write_pspq_data(ws, test_config, list_pspq, dim_srg):
     if dim_srg == 'Torr':
         coef_mat = [1,133.32]
     elif dim_srg == 'Pa':
-        coef_mat == [1/133.32, 1]
+        coef_mat = [1/133.32, 1]
     else:
-        print('SRGの単位が正しく記入されていません')
+        messagebox.showerror('SRGの単位が正しく記入されていません')
 
     for i in range(len(list_word)):
         for j in range(len(list_word[0])):
@@ -140,6 +141,9 @@ def make_pspq_curve(ws, test_config):
     # 軸ラベル設定
     ps.x_axis.title = 'Inlet pressure [Pa]'
     ps.y_axis.title = 'Pumping speed [L/s]'
+
+    # column_sccm = list(ws.iter_rows(min_col=4, min_row=4, max_row=ws.max_row).values)
+    # print(f'{column_sccm=}')
 
     # 参照するデータを設定
     x_values = Reference(ws, min_col=4, min_row=4, max_row=ws.max_row)
@@ -208,7 +212,7 @@ def write_backpressure_data(ws, test_config, dict_backpressure, dim_srg):
     elif dim_srg == 'Pa':
         coef_mat == [1/133.32, 1]
     else:
-        print('SRGの単位が正しく記入されていません')
+        messagebox('エラー！','SRGの単位が選択されていません')
 
     sccm_list = list(dict_backpressure.keys())
 
@@ -284,26 +288,30 @@ def data_process(file_name,sheet_name,test_config, dim_srg):
     start_row = 18
     # ブック読み込み
 
-
+    # excel = win32com.client.Dispatch('Excel.Application')
+    # excel.Visible = True
+    # wb = excel.Workbooks.Open(file_name)
+    # wb.Save()
+    # excel.Quit()
     if file_name.split('.')[1] == 'xlsm':
-        wb = xl.load_workbook(file_name, data_only=True, keep_vba=True)
+        wb_tmp = xl.load_workbook(file_name, data_only=True, keep_vba=True)
+        wb = xl.load_workbook(file_name, data_only=False, keep_vba=True)
 
     else:
-        wb = xl.load_workbook(file_name, data_only=True)
+        wb_tmp = xl.load_workbook(file_name, data_only=True)
+        wb = xl.load_workbook(file_name, data_only=False)
 
-    measured_data_sheet = wb[sheet_name]
+    measured_data_sheet = wb_tmp[sheet_name]
 
     pspq, backpressure, list_pspq, dict_backpressure = data_sort(measured_data_sheet, start_row)
-
+    wb_tmp.close()
     #データ整理とグラフを作るモジュールを呼び出す．
     if pspq == True:
-        print('PS曲線，PQ曲線を作成します．（SHEET：PSPQ）\n')
         ws_pqps = wb.create_sheet('PQPS',1)
         write_pspq_data(ws_pqps, test_config, list_pspq, dim_srg)
         make_pspq_curve(ws_pqps, test_config)
 
     if backpressure == True:
-        print('背圧特性のグラフを作成します．（SHEET：backpressure）\n')
         ws_backpressure = wb.create_sheet('Back pressure',1)
         write_backpressure_data(ws_backpressure, test_config, dict_backpressure,dim_srg)
         make_backpressure_curve(ws_backpressure, test_config, dict_backpressure)
@@ -312,6 +320,8 @@ def data_process(file_name,sheet_name,test_config, dim_srg):
         wb.save(file_name)
     except PermissionError:
         wb.save('new_book.xlsx')
-        print('Caution!!')
-        print('err msg: 「エクセルファイルが閉じられていないので，指定ファイルに保存できません．\n別ブックとして保存しました．」')
 
+        messagebox.showwarning('注意！','エクセルファイルが閉じられていないので，指定ファイルに保存できません．\n別ブックとして保存しました．')
+
+    # wb = excel.Workbooks.Open(file_name)
+    return pspq, backpressure

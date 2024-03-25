@@ -78,7 +78,17 @@ def make_graph(filepath_frame, dim_p_frame, config_frame, sheetname_frame):
     # 測定シートのシート名
     sheet_name = parameter[3]
 
-    mgp.data_process(file_name, sheet_name, test_config, dim_srg)
+    pspq, backpressure = mgp.data_process(file_name, sheet_name, test_config, dim_srg)
+
+
+    if (pspq == True) and ( backpressure == True):
+        messagebox.showinfo('確認', 'PS，PQ曲線，背圧特性のグラフを作成しました．')
+    elif pspq == True:
+        messagebox.showinfo('確認', 'PS，PQ曲線を作成しました．')
+    elif backpressure == True:
+        messagebox.showinfo('確認', '背圧特性のグラフを作成しました．')
+
+
 
 def set_do_button(parent_frame, filepath_frame, dim_p_frame, config_frame, sheetname_frame):
     main_frame = ttk.Frame(parent_frame)
