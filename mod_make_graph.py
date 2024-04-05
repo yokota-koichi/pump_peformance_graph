@@ -19,7 +19,7 @@ def data_sort(ws, start_row):
     list_rownum_backpressure = []
     for i in range(start_row, lastrow + 1):
         # まず，SRGの列にデータがない行と流量の列が0，もしくは空白の行を除外．
-        if (ws.Cells(i,7).Value != None) and (ws.Cells(i,3).Value != (None or 0)):
+        if (ws.Cells(i,7).Value != None) and (ws.Cells(i,3).Value != (None or 0)) and (isinstance(ws.Cells(i,4).Value, str) == False) :
             # 排気口圧力の列が空白の行の行番号をリストに格納．
             if ws.Cells(i,6).Value == None:
                 list_rownum_pspq.append(i)
@@ -32,7 +32,7 @@ def data_sort(ws, start_row):
         # 引き切りのデータの，[流量，SRG値，VAT値，流速]のリストを作成．
         list_pspq = []
         for i in list_rownum_pspq:
-            list_pspq.append([ws.Cells(i,3).Value, ws.Cells(i,7).Value, ws.Cells(i,11).Value,ws.Cells(i,12).Value])
+            list_pspq.append([ws.Cells(i,4).Value, ws.Cells(i,7).Value, ws.Cells(i,11).Value,ws.Cells(i,12).Value])
         # 流量を昇順に並び替え
         list_pspq.sort()
         pspq = True
@@ -42,7 +42,7 @@ def data_sort(ws, start_row):
         # C列からsccmを取得
         list_sccm = []
         for i in list_rownum_backpressure:
-            list_sccm.append(round(ws.Cells(i,3).Value))
+            list_sccm.append(round(ws.Cells(i,4).Value))
 
         # list_sccmの中から種類を抜き出す．（辞書｛sccm：個数｝を作成し，key()で種類を抜き出す）
         list_sccm_var = Counter(list_sccm).keys()
@@ -53,7 +53,7 @@ def data_sort(ws, start_row):
         for i in sorted(list_sccm_var):
             dict_backpressure[i] = []
             for j in list_rownum_backpressure:
-                if round(ws.Cells(j,3).Value) == i:
+                if round(ws.Cells(j,4).Value) == i:
                     dict_backpressure[i].append([ws.Cells(j,11).Value, ws.Cells(j,7).Value])
             dict_backpressure[i].sort()
         backpressure = True
@@ -74,7 +74,7 @@ def data_sort(ws, start_row):
 
 def write_pspq_data(ws, test_config, list_pspq, dim_srg):
     list_word = [['','',test_config,'','','',''],['Gas throughput', '', 'Inlet pressure', '', 'Foreline pressure', '', 'Pumping speed'], ['sccm', '', 'Torr', 'Pa', 'Torr', 'Pa', 'L/s']]
-
+    print(list_pspq)
     if dim_srg == 'Torr':
         coef_mat = [1,133.32]
     elif dim_srg == 'Pa':
@@ -219,7 +219,7 @@ def make_backpressure_curve(ws, test_config, dict_backpressure):
 
 def data_process(file_name,sheet_name,test_config, dim_srg):
     xl = win32com.client.Dispatch('Excel.Application')
-    xl.Visible = False
+    # xl.Visible = False
     wb = xl.Workbooks.Open(file_name)
     ws = wb.Worksheets(sheet_name)
 
@@ -266,7 +266,7 @@ if __name__ == '__main__':
     dim_srg = 'Torr' # or 'Pa'
 
     # ファイルパスを記入．このpyファイルからの相対パス．もしくは絶対パス．
-    file_name = r"C:\Users\shimadzu\OneDrive - SHIMADZU\ykt\03_my program\python\pump_performance\pywin\背圧調整排速測定シート_1704LMF(T1)_Ar_20231226.xlsm"
+    file_name = r"\\172.31.120.33\産業機械事業部tmpbu\TMP\k_共用\e_登録文書\g_GAxx\8_GA8x-xxxx_新採番(W1)\7_GA87-xxxx_技術文書(社内ﾚﾎﾟｰﾄ)\GA87-1463-xx_5305用ハーフラック電源の開発および量産化_vol2\GA87-1463-81_TMP-5305_排気性能測定(ダイカストステータ)_温調75℃85℃\TMP-5305LMTx_VG400_保護ﾈｯﾄ有り_温調Off_ダイカストステータ_PQ_N2_180119再測定.xls"
     # 測定シートのシート名
     sheet_name = 'Sheet1'
 
