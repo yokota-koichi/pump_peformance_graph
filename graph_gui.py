@@ -58,7 +58,7 @@ def set_dim_radiobutton(parent_frame):
 def set_cautionlabel_frame(parent_frame):
     cautionlabel_frame = ttk.Frame(parent_frame)
     tk.Label(cautionlabel_frame, text='注意：背圧値が空欄かどうかで排速測定か背圧特性を判断しています．\nそのため測定シートのF列は').pack()
-    tk.Label(cautionlabel_frame,text='排速測定の時は”空欄”\n背圧特性の時は引き切りでも”0”', font=('',10,'bold')).pack(pady=5)
+    tk.Label(cautionlabel_frame,text='排速測定の時は”空欄”\n背圧特性の引き切りは”0”を記入してください', font=('',10,'bold')).pack(pady=5)
     tk.Label(cautionlabel_frame,text='を記入してください．').pack()
     cautionlabel_frame.pack()
 
@@ -110,7 +110,7 @@ def set_do_button(parent_frame, filepath_frame, dim_p_frame, config_frame, sheet
 # フレームを作成する関数を呼び出して配置
 def set_main_frame(root_frame):
     # ファイル選択エリア作成（ファイルの拡張子を指定）
-    filepath_frame = set_file_frame(root_frame, "ファイル", [('excelファイル', '*.xlsx;*xlsm;.xls')])
+    filepath_frame = set_file_frame(root_frame, "ファイル", [('excelファイル', '*.xlsx;*.xlsm;*.xls')])
     dim_p_frame = set_dim_radiobutton(root_frame)
     config_frame = set_config_frame(root_frame)
     sheetname_frame = set_sheetname_frame(root_frame)
