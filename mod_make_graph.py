@@ -73,8 +73,7 @@ def data_sort(ws, start_row):
 
 
 def write_pspq_data(ws, test_config, list_pspq, dim_srg):
-    list_word = [[test_config,'','','','','',''],['Gas throughput', 'Inlet pressure', '', 'Foreline pressure', '', 'Pumping speed'], ['sccm', 'Torr', 'Pa', 'Torr', 'Pa', 'L/s']]
-    print(list_pspq)
+    list_word = [[test_config,'','','','',''],['Gas throughput', 'Inlet pressure', '', 'Foreline pressure', '', 'Pumping speed'], ['sccm', 'Torr', 'Pa', 'Torr', 'Pa', 'L/s']]
     if dim_srg == 'Torr':
         coef_mat = [1,133.32]
     elif dim_srg == 'Pa':
@@ -102,6 +101,8 @@ def make_pspq_curve(ws, test_config):
     ws.ChartObjects(1).Top = 400
     ws.ChartObjects(1).Width = 400
     ws.ChartObjects(1).Height = 250
+    ps.ChartArea.ClearContents()
+    ps.SeriesCollection().NewSeries()
     ps.FullSeriesCollection(1).XValues = "=%s!$B$4:$B$%d" %(ws.Name, lastrow)
     ps.FullSeriesCollection(1).Values = '=%s!$F$4:$F$%d' %(ws.Name, lastrow)
     ps.FullSeriesCollection(1).Name = test_config
@@ -127,8 +128,10 @@ def make_pspq_curve(ws, test_config):
     ws.ChartObjects(2).Top = 400
     ws.ChartObjects(2).Width = 400
     ws.ChartObjects(2).Height = 250
-    pq.FullSeriesCollection(1).XValues = "=%s!$C$4:$C$25" %ws.Name
-    pq.FullSeriesCollection(1).Values = '=%s!$A$4:$A$25' %ws.Name
+    pq.ChartArea.ClearContents()
+    pq.SeriesCollection().NewSeries()
+    pq.FullSeriesCollection(1).XValues = "=%s!$B$4:$B$%d" %(ws.Name, lastrow)
+    pq.FullSeriesCollection(1).Values = '=%s!$A$4:$A$%d' %(ws.Name, lastrow)
     pq.FullSeriesCollection(1).Name = test_config
     pq.Hastitle = True
     pq.ChartTitle.Text='PQ curve'
@@ -266,7 +269,7 @@ if __name__ == '__main__':
     dim_srg = 'Torr' # or 'Pa'
 
     # ファイルパスを記入．このpyファイルからの相対パス．もしくは絶対パス．
-    file_name = r"\\172.31.120.33\産業機械事業部tmpbu\TMP\k_共用\e_登録文書\g_GAxx\8_GA8x-xxxx_新採番(W1)\7_GA87-xxxx_技術文書(社内ﾚﾎﾟｰﾄ)\GA87-1463-xx_5305用ハーフラック電源の開発および量産化_vol2\GA87-1463-81_TMP-5305_排気性能測定(ダイカストステータ)_温調75℃85℃\TMP-5305LMTx_VG400_保護ﾈｯﾄ有り_温調Off_ダイカストステータ_PQ_N2_180119再測定.xls"
+    file_name = r"C:\Users\shimadzu\OneDrive - SHIMADZU\0_ykt\01_project\GA87-2258_ステータ4段目生成物堆積対策水平展開\01_5305\GA87-2258-04_ステータ4段目生成物堆積対策水平展開_5305_排気性能測定\02_測定シート\02_温調なし\背圧調整排速測定シート_5305_Ar_温調なし_生成物対策ｽﾃｰﾀ.xlsm"
     # 測定シートのシート名
     sheet_name = 'Sheet1'
 
