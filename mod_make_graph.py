@@ -88,11 +88,11 @@ def write_pspq_data(ws, test_config, list_pspq, dim_srg):
 
     for i in range(len(list_pspq)):
         ws.Cells(i+4,1).Value = list_pspq[i][0]
-        ws.Cells(i+4,3).Value=list_pspq[i][1]*coef_mat[0]
-        ws.Cells(i+4,4).Value=list_pspq[i][1]*coef_mat[1]
-        ws.Cells(i+4,5).Value=list_pspq[i][2]*coef_mat[0]
-        ws.Cells(i+4,6).Value=list_pspq[i][2]*coef_mat[1]
-        ws.Cells(i+4,7).Value=list_pspq[i][3]
+        ws.Cells(i+4,2).Value=list_pspq[i][1]*coef_mat[0]
+        ws.Cells(i+4,3).Value=list_pspq[i][1]*coef_mat[1]
+        ws.Cells(i+4,4).Value=list_pspq[i][2]*coef_mat[0]
+        ws.Cells(i+4,5).Value=list_pspq[i][2]*coef_mat[1]
+        ws.Cells(i+4,6).Value=list_pspq[i][3]
 
 def make_pspq_curve(ws, test_config):
     lastrow = ws.Cells(ws.Rows.Count, 3).End(-4162).Row
