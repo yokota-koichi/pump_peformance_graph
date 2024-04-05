@@ -73,7 +73,7 @@ def data_sort(ws, start_row):
 
 
 def write_pspq_data(ws, test_config, list_pspq, dim_srg):
-    list_word = [['','',test_config,'','','',''],['Gas throughput', '', 'Inlet pressure', '', 'Foreline pressure', '', 'Pumping speed'], ['sccm', '', 'Torr', 'Pa', 'Torr', 'Pa', 'L/s']]
+    list_word = [[test_config,'','','','','',''],['Gas throughput', 'Inlet pressure', '', 'Foreline pressure', '', 'Pumping speed'], ['sccm', '', 'Torr', 'Pa', 'Torr', 'Pa', 'L/s']]
     print(list_pspq)
     if dim_srg == 'Torr':
         coef_mat = [1,133.32]
@@ -102,8 +102,8 @@ def make_pspq_curve(ws, test_config):
     ws.ChartObjects(1).Top = 400
     ws.ChartObjects(1).Width = 400
     ws.ChartObjects(1).Height = 250
-    ps.FullSeriesCollection(1).XValues = "=%s!$C$4:$C$%d" %(ws.Name, lastrow)
-    ps.FullSeriesCollection(1).Values = '=%s!$G$4:$G$%d' %(ws.Name, lastrow)
+    ps.FullSeriesCollection(1).XValues = "=%s!$B$4:$B$%d" %(ws.Name, lastrow)
+    ps.FullSeriesCollection(1).Values = '=%s!$F$4:$F$%d' %(ws.Name, lastrow)
     ps.FullSeriesCollection(1).Name = test_config
     ps.Hastitle = True
     ps.ChartTitle.Text='PS curve'
