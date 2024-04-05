@@ -168,7 +168,7 @@ def write_backpressure_data(ws, test_config, dict_backpressure, dim_srg):
         ws.Cells(3,2*i+2).Value='Inlet pressure\n[Torr]'
         for j in range(len(dict_backpressure[sccm_list[i]])):
             ws.Cells(j+4,2*i+1).Value=dict_backpressure[sccm_list[i]][j][0]
-            ws.Cells(j+4,2*i+2).Value=dict_backpressure[sccm_list[i]][j][1]
+            ws.Cells(j+4,2*i+2).Value=dict_backpressure[sccm_list[i]][j][1]*coef_mat[0]
 
 
 """
