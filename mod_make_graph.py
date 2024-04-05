@@ -117,6 +117,7 @@ def make_pspq_curve(ws, test_config):
     ps.Axes(1).HasMinorGridlines = True
     ps.HasLegend = True
     ps.Legend.IncludeInLayout = True
+    ps.Legend.Position = -4152
 
 
 
@@ -143,6 +144,7 @@ def make_pspq_curve(ws, test_config):
     pq.Axes(2).HasTitle = True
     pq.Axes(2).AxisTitle.Text = 'Gas throughput [sccm]'
     pq.HasLegend = True
+    pq.Legend.Position = -4152
 
 
 
