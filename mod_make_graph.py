@@ -88,9 +88,13 @@ def write_pspq_data(ws, test_config, list_pspq, dim_srg):
     for i in range(len(list_pspq)):
         ws.Cells(i+4,1).Value = list_pspq[i][0]
         ws.Cells(i+4,2).Value=list_pspq[i][1]*coef_mat[0]
+        ws.Cells(i+4,2).NumberFormatLocal = "0.00E+00"
         ws.Cells(i+4,3).Value=list_pspq[i][1]*coef_mat[1]
-        ws.Cells(i+4,4).Value=list_pspq[i][2]*coef_mat[0]
-        ws.Cells(i+4,5).Value=list_pspq[i][2]*coef_mat[1]
+        ws.Cells(i+4,3).NumberFormatLocal = "0.00E+00"
+        ws.Cells(i+4,4).Value=list_pspq[i][2]
+        ws.Cells(i+4,4).NumberFormatLocal = "0.00E+00"
+        ws.Cells(i+4,5).Value=list_pspq[i][2]*133.32
+        ws.Cells(i+4,5).NumberFormatLocal = "0.00E+00"
         ws.Cells(i+4,6).Value=list_pspq[i][3]
 
 def make_pspq_curve(ws, test_config):
@@ -168,8 +172,9 @@ def write_backpressure_data(ws, test_config, dict_backpressure, dim_srg):
         ws.Cells(3,2*i+2).Value='Inlet pressure\n[Torr]'
         for j in range(len(dict_backpressure[sccm_list[i]])):
             ws.Cells(j+4,2*i+1).Value=dict_backpressure[sccm_list[i]][j][0]
+            ws.Cells(j+4,2*i+1).NumberFormatLocal = "0.00E+00"
             ws.Cells(j+4,2*i+2).Value=dict_backpressure[sccm_list[i]][j][1]*coef_mat[0]
-
+            ws.Cells(j+4,2*i+2).NumberFormatLocal = "0.00E+00"
 
 """
 背圧特性のグラフを作成するモジュール
@@ -271,7 +276,7 @@ if __name__ == '__main__':
     dim_srg = 'Torr' # or 'Pa'
 
     # ファイルパスを記入．このpyファイルからの相対パス．もしくは絶対パス．
-    file_name = r"C:\Users\shimadzu\OneDrive - SHIMADZU\0_ykt\01_project\GA87-2258_ステータ4段目生成物堆積対策水平展開\01_5305\GA87-2258-04_ステータ4段目生成物堆積対策水平展開_5305_排気性能測定\02_測定シート\02_温調なし\背圧調整排速測定シート_5305_Ar_温調なし_生成物対策ｽﾃｰﾀ.xlsm"
+    file_name = r"C:\Users\shimadzu\OneDrive - SHIMADZU\0_ykt\01_project\GA87-2258_ステータ4段目生成物堆積対策水平展開\01_5305\GA87-2258-04_ステータ4段目生成物堆積対策水平展開_5305_排気性能測定\02_測定シート\01_温調あり\背圧調整排速測定シート_5305_N2_温調あり_生成物対策ｽﾃｰﾀ.xlsm"
     # 測定シートのシート名
     sheet_name = 'Sheet1'
 

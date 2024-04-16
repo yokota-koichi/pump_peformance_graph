@@ -89,7 +89,14 @@ def make_graph(filepath_frame, dim_p_frame, config_frame, sheetname_frame):
     # 測定シートのシート名
     sheet_name = parameter[3]
 
-    pspq, backpressure = mgp.data_process(file_name, sheet_name, test_config, dim_srg)
+    try:
+        pspq, backpressure = mgp.data_process(file_name, sheet_name, test_config, dim_srg)
+
+    except Exception as e:
+        print(e.__class__.__name__)
+        print(e.args)
+        print(e)
+        print(f"{e.__class__.__name__}: {e}")
 
 
     if (pspq == True) and ( backpressure == True):
